@@ -9,9 +9,7 @@ class MoviesTable extends Component {
     {
       path: "title",
       label: "Title",
-      content: (movie) => (
-        <Link to={`/movies/${movie._id}`}>{movie.title}</Link>
-      ),
+      content: (movie) => <span>{movie.title}</span>,
     },
     { path: "genre.name", label: "Genre" },
     { path: "numberInStock", label: "Stock" },
@@ -23,6 +21,12 @@ class MoviesTable extends Component {
       ),
     },
   ];
+
+  titleColumnIsAdmin = {
+    path: "title",
+    label: "Title",
+    content: (movie) => <Link to={`/movies/${movie._id}`}>{movie.title}</Link>,
+  };
 
   deleteColumn = {
     key: "delete",
@@ -39,7 +43,12 @@ class MoviesTable extends Component {
   constructor() {
     super();
     const user = auth.getCurrentUser();
-    if (user && user.isAdmin) this.columns.push(this.deleteColumn);
+    if (user && user.isAdmin) {
+      this.columns.push(this.deleteColumn);
+      const columns = this.columns;
+      columns.shift();
+      columns.unshift(this.titleColumnIsAdmin);
+    }
   }
 
   render() {

@@ -97,7 +97,6 @@ class Movies extends Component {
     const { length: count } = this.state.movies;
     const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
     const { user } = this.props;
-
     const { totalCount, data: movies } = this.getPagedData();
 
     return (
@@ -110,7 +109,7 @@ class Movies extends Component {
           />
         </div>
         <div className="col">
-          {user && (
+          {user && user.isAdmin && (
             <Link
               to="/movies/new"
               className="btn btn-primary"

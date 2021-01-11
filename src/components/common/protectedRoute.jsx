@@ -3,11 +3,12 @@ import { Route, Redirect } from "react-router-dom";
 import auth from "../../services/authService";
 
 const ProtectedRoute = ({ path, component: Component, render, ...rest }) => {
+  const user = auth.getCurrentUser();
   return (
     <Route
       {...rest}
       render={(props) => {
-        if (!auth.getCurrentUser())
+        if (!user)
           return (
             <Redirect
               to={{
@@ -16,6 +17,16 @@ const ProtectedRoute = ({ path, component: Component, render, ...rest }) => {
               }}
             />
           );
+        else if (user && !user.isAdmin) {
+          return (
+            <Redirect
+              to={{
+                pathname: "/movies",
+                state: { from: props.location },
+              }}
+            />
+          );
+        }
         return Component ? <Component {...props} /> : render(props);
       }}
     />
